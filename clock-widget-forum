@@ -1,0 +1,139 @@
+<center>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+.widget{
+  max-width:300px;
+  padding:18px;
+  border-radius:16px;
+  background:rgba(255,255,255,0.04);
+  backdrop-filter:blur(10px);
+  border:1px solid rgba(255,255,255,0.08);
+  font-family:Inter,Arial,Helvetica,sans-serif;
+  color:#eaeaea;
+}
+
+.header{
+  text-align:center;
+  margin-bottom:16px;
+}
+
+.clock{
+  font-size:34px;
+  font-weight:700;
+  letter-spacing:1px;
+}
+
+.date{
+  font-size:12px;
+  opacity:0.6;
+  margin-top:4px;
+}
+
+.section{
+  margin-top:12px;
+}
+
+.section-title{
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:1px;
+  opacity:0.5;
+  margin-bottom:6px;
+}
+
+.tz{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:10px 12px;
+  border-radius:10px;
+  background:rgba(255,255,255,0.03);
+  margin-bottom:6px;
+  font-size:13px;
+}
+
+.tz i{
+  margin-right:6px;
+  opacity:0.7;
+}
+
+.tz span:last-child{
+  font-weight:600;
+}
+
+.tz:hover{
+  background:rgba(255,255,255,0.06);
+}
+</style>
+
+<div class="widget">
+
+  <div class="header">
+    <div class="clock" id="clock">00:00:00</div>
+    <div class="date" id="date">--</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Time zones</div>
+
+    <div class="tz">
+      <div><i class="fa-solid fa-location-dot"></i> Local</div>
+      <span id="local"></span>
+    </div>
+
+    <div class="tz">
+      <div><i class="fa-solid fa-globe"></i> UTC</div>
+      <span id="utc"></span>
+    </div>
+
+    <div class="tz">
+      <div><i class="fa-solid fa-flag-usa"></i> New York</div>
+      <span id="ny"></span>
+    </div>
+
+    <div class="tz">
+      <div><i class="fa-solid fa-torii-gate"></i> Tokio</div>
+      <span id="tokyo"></span>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+function update(){
+  const now = new Date();
+
+  function format(tz){
+    return now.toLocaleTimeString("pl-PL", {
+      timeZone: tz,
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  }
+
+  document.getElementById("clock").innerText =
+    now.toLocaleTimeString("pl-PL");
+
+  document.getElementById("date").innerText =
+    now.toLocaleDateString("pl-PL", {
+      weekday:"long",
+      day:"numeric",
+      month:"long"
+    });
+
+  document.getElementById("local").innerText =
+    format(Intl.DateTimeFormat().resolvedOptions().timeZone);
+
+  document.getElementById("utc").innerText = format("UTC");
+  document.getElementById("ny").innerText = format("America/New_York");
+  document.getElementById("tokyo").innerText = format("Asia/Tokyo");
+}
+
+update();
+setInterval(update,1000);
+</script>
+
+</center>

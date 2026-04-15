@@ -17,6 +17,7 @@
 .header{
   text-align:center;
   margin-bottom:16px;
+  cursor:pointer;
 }
 
 .clock{
@@ -33,6 +34,16 @@
 
 .section{
   margin-top:12px;
+  overflow:hidden;
+  max-height:500px;
+  opacity:1;
+  transition: all 0.35s ease;
+}
+
+.section.collapsed{
+  max-height:0;
+  opacity:0;
+  margin-top:0;
 }
 
 .section-title{
@@ -66,16 +77,24 @@
 .tz:hover{
   background:rgba(255,255,255,0.06);
 }
+
+.hint{
+  font-size:10px;
+  opacity:0.35;
+  margin-top:6px;
+}
 </style>
 
 <div class="widget">
 
-  <div class="header">
+  <div class="header" id="toggle">
     <div class="clock" id="clock">00:00:00</div>
     <div class="date" id="date">--</div>
+    <div class="hint">click to toggle time zones</div>
   </div>
 
-  <div class="section">
+  <div class="section" id="section">
+
     <div class="section-title">Time zones</div>
 
     <div class="tz">
@@ -103,6 +122,21 @@
 </div>
 
 <script>
+let collapsed = localStorage.getItem("collapsed") === "1";
+
+function apply(){
+  document.getElementById("section")
+    .classList.toggle("collapsed", collapsed);
+}
+
+document.getElementById("toggle").onclick = () => {
+  collapsed = !collapsed;
+  localStorage.setItem("collapsed", collapsed ? "1" : "0");
+  apply();
+};
+
+apply();
+
 function update(){
   const now = new Date();
 

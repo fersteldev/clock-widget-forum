@@ -2,7 +2,7 @@
 
 ![status](https://img.shields.io/badge/status-active-2ea44f?style=flat-square)
 ![type](https://img.shields.io/badge/type-forum_widget-blue?style=flat-square)
-![version](https://img.shields.io/badge/version-1.0.0-fc4955?style=flat-square)
+![version](https://img.shields.io/badge/version-1.0.1-fc4955?style=flat-square)
 ![license](https://img.shields.io/badge/license-MIT-lightgrey?style=flat-square)
 
 Simple sidebar clock widget for forums.

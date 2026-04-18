@@ -1,16 +1,23 @@
-<center>
-
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 <style>
+body{
+  margin:0;
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:#0b0d10;
+  font-family:Inter,Arial,Helvetica,sans-serif;
+}
+
 .widget{
-  max-width:300px;
+  width:250px;
   padding:18px;
   border-radius:16px;
   background:rgba(255,255,255,0.04);
   backdrop-filter:blur(10px);
   border:1px solid rgba(255,255,255,0.08);
-  font-family:Inter,Arial,Helvetica,sans-serif;
   color:#eaeaea;
 }
 
@@ -52,6 +59,7 @@
   letter-spacing:1px;
   opacity:0.5;
   margin-bottom:6px;
+  text-align:center;
 }
 
 .tz{
@@ -83,6 +91,36 @@
   opacity:0.35;
   margin-top:6px;
 }
+
+.search{
+  margin-top:10px;
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+
+.search input{
+  width:100%;
+  padding:8px 10px;
+  border-radius:8px;
+  border:none;
+  outline:none;
+  font-size:12px;
+  background:rgba(255,255,255,0.06);
+  color:#fff;
+}
+
+.result{
+  overflow:hidden;
+  max-height:0;
+  opacity:0;
+  transition:all 0.3s ease;
+}
+
+.result.show{
+  max-height:60px;
+  opacity:1;
+}
 </style>
 
 <div class="widget">
@@ -113,8 +151,18 @@
     </div>
 
     <div class="tz">
-      <div><i class="fa-solid fa-torii-gate"></i> Tokio</div>
+      <div><i class="fa-solid fa-torii-gate"></i> Tokyo</div>
       <span id="tokyo"></span>
+    </div>
+
+    <div class="search">
+      <input id="search" placeholder="search city...">
+      <div class="result" id="result">
+        <div class="tz">
+          <div id="resultName"></div>
+          <span id="resultTime"></span>
+        </div>
+      </div>
     </div>
 
   </div>
@@ -136,6 +184,125 @@ document.getElementById("toggle").onclick = () => {
 };
 
 apply();
+
+const map = {
+  // EUROPE
+  poland: "Europe/Warsaw",
+  warsaw: "Europe/Warsaw",
+  germany: "Europe/Berlin",
+  berlin: "Europe/Berlin",
+  france: "Europe/Paris",
+  paris: "Europe/Paris",
+  spain: "Europe/Madrid",
+  madrid: "Europe/Madrid",
+  italy: "Europe/Rome",
+  rome: "Europe/Rome",
+  uk: "Europe/London",
+  england: "Europe/London",
+  london: "Europe/London",
+  netherlands: "Europe/Amsterdam",
+  amsterdam: "Europe/Amsterdam",
+  sweden: "Europe/Stockholm",
+  stockholm: "Europe/Stockholm",
+  norway: "Europe/Oslo",
+  oslo: "Europe/Oslo",
+  finland: "Europe/Helsinki",
+  helsinki: "Europe/Helsinki",
+  switzerland: "Europe/Zurich",
+  zurich: "Europe/Zurich",
+  austria: "Europe/Vienna",
+  vienna: "Europe/Vienna",
+  greece: "Europe/Athens",
+  athens: "Europe/Athens",
+  turkey: "Europe/Istanbul",
+  istanbul: "Europe/Istanbul",
+
+  // NORTH AMERICA
+  usa: "America/New_York",
+  unitedstates: "America/New_York",
+  newyork: "America/New_York",
+  ny: "America/New_York",
+  toronto: "America/Toronto",
+  canada: "America/Toronto",
+  mexico: "America/Mexico_City",
+  mexicocity: "America/Mexico_City",
+  losangeles: "America/Los_Angeles",
+  la: "America/Los_Angeles",
+  chicago: "America/Chicago",
+  miami: "America/New_York",
+  vancouver: "America/Vancouver",
+
+  // SOUTH AMERICA
+  brazil: "America/Sao_Paulo",
+  brasil: "America/Sao_Paulo",
+  saopaulo: "America/Sao_Paulo",
+  rio: "America/Sao_Paulo",
+  argentina: "America/Argentina/Buenos_Aires",
+  buenosaires: "America/Argentina/Buenos_Aires",
+  chile: "America/Santiago",
+  santiago: "America/Santiago",
+  colombia: "America/Bogota",
+  bogota: "America/Bogota",
+  peru: "America/Lima",
+  lima: "America/Lima",
+
+  // ASIA
+  japan: "Asia/Tokyo",
+  tokyo: "Asia/Tokyo",
+  china: "Asia/Shanghai",
+  beijing: "Asia/Shanghai",
+  shanghai: "Asia/Shanghai",
+  india: "Asia/Kolkata",
+  mumbai: "Asia/Kolkata",
+  delhi: "Asia/Kolkata",
+  singapore: "Asia/Singapore",
+  thailand: "Asia/Bangkok",
+  bangkok: "Asia/Bangkok",
+  korea: "Asia/Seoul",
+  seoul: "Asia/Seoul",
+  vietnam: "Asia/Ho_Chi_Minh",
+  dubai: "Asia/Dubai",
+  uae: "Asia/Dubai",
+  israel: "Asia/Jerusalem",
+  jerusalem: "Asia/Jerusalem",
+
+  // AFRICA
+  morocco: "Africa/Casablanca",
+  casablanca: "Africa/Casablanca",
+  egypt: "Africa/Cairo",
+  cairo: "Africa/Cairo",
+  southafrica: "Africa/Johannesburg",
+  johannesburg: "Africa/Johannesburg",
+  nigeria: "Africa/Lagos",
+  lagos: "Africa/Lagos",
+  kenya: "Africa/Nairobi",
+  nairobi: "Africa/Nairobi",
+
+  // OCEANIA
+  australia: "Australia/Sydney",
+  sydney: "Australia/Sydney",
+  melbourne: "Australia/Melbourne",
+  perth: "Australia/Perth",
+  newzealand: "Pacific/Auckland",
+  auckland: "Pacific/Auckland"
+};
+
+let currentTZ = null;
+let currentName = "";
+
+document.getElementById("search").oninput = e => {
+  const val = e.target.value.toLowerCase().replace(/\s/g,'');
+
+  if(map[val]){
+    currentTZ = map[val];
+    currentName = e.target.value;
+    document.getElementById("resultName").innerText = currentName;
+    document.getElementById("result").classList.add("show");
+  }else{
+    currentTZ = null;
+    document.getElementById("result").classList.remove("show");
+  }
+};
 
 function update(){
   const now = new Date();
@@ -164,10 +331,12 @@ function update(){
   document.getElementById("utc").innerText = format("UTC");
   document.getElementById("ny").innerText = format("America/New_York");
   document.getElementById("tokyo").innerText = format("Asia/Tokyo");
+
+  if(currentTZ){
+    document.getElementById("resultTime").innerText = format(currentTZ);
+  }
 }
 
 update();
 setInterval(update,1000);
 </script>
-
-</center>

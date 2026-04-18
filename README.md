@@ -2,7 +2,7 @@
 
 ![status](https://img.shields.io/badge/status-active-2ea44f?style=flat-square)
 ![type](https://img.shields.io/badge/type-forum_widget-blue?style=flat-square)
-![version](https://img.shields.io/badge/version-1.0.1-fc4955?style=flat-square)
+![version](https://img.shields.io/badge/version-1.0.2-fc4955?style=flat-square)
 ![license](https://img.shields.io/badge/license-MIT-lightgrey?style=flat-square)
 
 Simple sidebar clock widget for forums.
@@ -53,8 +53,11 @@ That’s it, no configuration.
 >[!NOTE]
 >This widget relies on JavaScript. If your forum blocks scripts in widgets, it will not work.
 
->[!TIP]  
-If you want accurate timezone handling, make sure your forum allows `Intl.DateTimeFormat`.
+>[!IMPORTANT]
+>Timezone detection is client-side only. There is no backend or API dependency.
+
+>[!TIP]
+>For best performance, use modern browsers that support `Intl.supportedValuesOf('timeZone')`.
 
 ---
 
@@ -67,6 +70,8 @@ UTC
 America/New_York
 Asia/Tokyo
 ```
+
+Supports all IANA time zones via `Intl.supportedValuesOf('timeZone')`. You can search almost all cities/countries in the world.
 
 ## Custom timezones
 
